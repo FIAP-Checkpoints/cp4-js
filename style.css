@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.product-card {
+  transition: transform .2s;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item img {
+  width: 50px;
+}
+
+.cart-total {
+  text-align: right;
+  padding-top: 10px;
+}

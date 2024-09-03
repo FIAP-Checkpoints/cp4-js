@@ -1,0 +1,53 @@
+{
+    "products": [
+      {
+        "id": 1,
+        "name": "Eco Shirt",
+        "category": "clothes",
+        "price": 25.00,
+        "img": "https://images.unsplash.com/photo-1610502778270-c5c6f4c7d575?q=80&w=1467&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "A sustainable shirt made from organic cotton."
+      },
+      {
+        "id": 2,
+        "name": "Organic Soap",
+        "category": "beauty",
+        "price": 5.99,
+        "img": "https://images.unsplash.com/photo-1542038374755-a93543c5178f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Natural soap made with organic ingredients."
+      },
+      {
+        "id": 3,
+        "name": "Eco Bag",
+        "category": "utility",
+        "price": 45.00,
+        "img": "https://images.unsplash.com/photo-1572810677431-9a662da8d284?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Bolsa sustentável feita de algodão orgânico."
+      },
+      {
+        "id": 4,
+        "name": "Metal Straw",
+        "category": "utility",
+        "price": 30.00,
+        "img": "https://images.unsplash.com/photo-1534446223232-f094a9527979?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "Canudo reutilizável de aço inoxidável."
+      },
+      {
+        "id": 5,
+        "name": "Reusable Water Bottle",
+        "category": "utility",
+        "price": 15.00,
+        "img": "https://images.unsplash.com/photo-1605539586415-daa9dfa260df?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "A reusable bottle to reduce plastic waste."
+      },
+      {
+        "id": 6,
+        "name": "Bamboo Toothbrush",
+        "category": "beauty",
+        "price": 3.99,
+        "img": "https://images.unsplash.com/photo-1563635707334-5ce91b375ea6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "description": "A toothbrush made from bamboo."
+      }
+    ]
+  }
+

@@ -1,0 +1,77 @@
+/* General Styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Product Card Styling */
+.product-card {
+  transition: transform .2s;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+/* Cart Styling */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item img {
+  width: 50px;
+}
+
+.cart-total {
+  text-align: right;
+  padding-top: 10px;
+}
+
+/* Admin Section Styling */
+.container h2 {
+  margin-bottom: 20px;
+}
+
+#product-form {
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#product-form .form-label {
+  font-weight: bold;
+}
+
+#product-form .form-control {
+  margin-bottom: 10px;
+}
+
+#product-form .btn-success {
+  width: 100%;
+}
+
+#admin-product-list {
+  margin-top: 30px;
+}
+
+#admin-product-list .product-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#admin-product-list .product-card .card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#admin-product-list .btn-warning, #admin-product-list .btn-danger {
+  margin-left: 5px;
+}
