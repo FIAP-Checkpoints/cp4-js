@@ -52,8 +52,10 @@ function fetchProducts() {
               <p class="card-text">${product.description}</p>
               <p class="card-text"><strong>$${parseFloat(product.price).toFixed(2)}</strong></p>
               <p class="card-text"><small class="text-muted">Category: ${product.category}</small></p>
-              <button class="btn btn-primary btn-sm me-2" onclick="editProduct(${product.id})">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button>
+              <div class="btn-group">
+                <button class="btn btn-success" onclick="editProduct(${product.id})"><i class="fas fa-edit me-1"></i>Edit</button>
+                <button class="btn btn-danger" onclick="deleteProduct(${product.id})"><i class="fas fa-trash-alt me-1"></i>Delete</button>
+              </div>
             </div>
           </div>
         </div>

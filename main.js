@@ -1,7 +1,7 @@
 // Fetch products from localStorage
 function fetchProducts() {
   return JSON.parse(localStorage.getItem('products')) || [];
-}
+} 
 
 // Function to render products
 function renderProducts(filter = 'all') {
@@ -10,20 +10,22 @@ function renderProducts(filter = 'all') {
   productList.innerHTML = '';
   const filteredProducts = filter === 'all' ? products : products.filter(p => p.category === filter);
   filteredProducts.forEach(product => {
-    const productCard = document.createElement('div');
-    productCard.classList.add('col-md-4', 'mb-4');
-    productCard.innerHTML = `
-      <div class="card product-card">
-        <img src="${product.img}" class="card-img-top" alt="${product.name}">
-        <div class="card-body">
-          <h5 class="card-title">${product.name}</h5>
-          <p class="card-text">$${product.price.toFixed(2)}</p>
-          <p class="card-text">${product.description}</p>
-          <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
-        </div>
-      </div>
-    `;
-    productList.appendChild(productCard);
+      const productCard = document.createElement('div');
+      productCard.classList.add('col-md-4', 'mb-4');
+      productCard.innerHTML = `
+          <div class="card product-card">
+              <img src="${product.img}" class="card-img-top" alt="${product.name}">
+              <div class="card-body">
+                  <h5 class="card-title">${product.name}</h5>
+                  <p class="card-text">$${product.price.toFixed(2)}</p>
+                  <p class="card-text">${product.description}</p>
+                  <button class="btn btn-success w-100" onclick="addToCart(${product.id})">
+                      <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                  </button>
+              </div>
+          </div>
+      `;
+      productList.appendChild(productCard);
   });
 }
 

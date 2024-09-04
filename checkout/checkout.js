@@ -7,17 +7,20 @@ function renderCheckoutItems() {
     const checkoutItems = document.getElementById('checkout-items');
     const checkoutTotal = document.getElementById('checkout-total');
     let total = 0;
-
     checkoutItems.innerHTML = '';
+
     cart.forEach(item => {
         total += item.price;
         checkoutItems.innerHTML += `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div>
-                    <img src="${item.img}" alt="${item.name}" width="50" class="me-2">
-                    ${item.name}
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                <div class="d-flex align-items-center">
+                    <img src="${item.img}" alt="${item.name}" width="50" class="me-3">
+                    <div>
+                        <h6 class="mb-0">${item.name}</h6>
+                        <small class="text-muted">Quantity: 1</small>
+                    </div>
                 </div>
-                <div>$${item.price.toFixed(2)}</div>
+                <div class="text-success">$${item.price.toFixed(2)}</div>
             </div>
         `;
     });
@@ -25,61 +28,62 @@ function renderCheckoutItems() {
     checkoutTotal.textContent = total.toFixed(2);
 }
 
+function formatCardNumber(input) {
+    let value = input.value.replace(/\D/g, '');
+    let formattedValue = '';
+    for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) {
+            formattedValue += ' ';
+        }
+        formattedValue += value[i];
+    }
+    input.value = formattedValue.trim();
+}
+
 function setupCardNumberInput() {
-    const cardInputs = [
-        document.getElementById('card-number-1'),
-        document.getElementById('card-number-2'),
-        document.getElementById('card-number-3'),
-        document.getElementById('card-number-4')
-    ];
-
-    cardInputs.forEach((input, index) => {
-        input.addEventListener('input', function() {
-            if (this.value.length === 4 && index < 3) {
-                cardInputs[index + 1].focus();
-            }
-        });
-
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
-                cardInputs[index - 1].focus();
-            }
-        });
+    const cardInput = document.getElementById('card-number');
+    cardInput.addEventListener('input', function() {
+        formatCardNumber(this);
     });
 }
 
-function validateMonth(value) {
-    const monthNum = parseInt(value, 10);
-    if (isNaN(monthNum)) return '';
-    if (monthNum < 1) return '01';
-    if (monthNum > 12) return '12';
-    return monthNum.toString().padStart(2, '0');
+function validateExpiryDate(month, year) {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear() % 100;
+    const currentMonth = currentDate.getMonth() + 1;
+
+    const inputYear = parseInt(year, 10);
+    const inputMonth = parseInt(month, 10);
+
+    if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
+        return false;
+    }
+    return true;
 }
 
 function setupExpiryDateInput() {
     const monthInput = document.getElementById('card-expiry-month');
     const yearInput = document.getElementById('card-expiry-year');
 
-    monthInput.addEventListener('input', function() {
-        this.value = validateMonth(this.value);
-        if (this.value.length === 2) {
-            yearInput.focus();
+    monthInput.addEventListener('change', function() {
+        if (yearInput.value) {
+            const isValid = validateExpiryDate(this.value, yearInput.value);
+            if (!isValid) {
+                alert('Please enter a valid expiry date');
+                this.value = '';
+                yearInput.value = '';
+            }
         }
     });
 
-    monthInput.addEventListener('blur', function() {
-        this.value = this.value.padStart(2, '0');
-    });
-
-    monthInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Backspace' && this.value.length === 0) {
-            yearInput.value = '';
-        }
-    });
-
-    yearInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Backspace' && this.value.length === 0) {
-            monthInput.focus();
+    yearInput.addEventListener('input', function() {
+        if (this.value.length === 2 && monthInput.value) {
+            const isValid = validateExpiryDate(monthInput.value, this.value);
+            if (!isValid) {
+                alert('Please enter a valid expiry date');
+                monthInput.value = '';
+                this.value = '';
+            }
         }
     });
 }
@@ -96,17 +100,15 @@ function showCheckoutModal() {
 
 document.getElementById('payment-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    const cardNumber = [
-        document.getElementById('card-number-1').value,
-        document.getElementById('card-number-2').value,
-        document.getElementById('card-number-3').value,
-        document.getElementById('card-number-4').value
-    ].join(' ');
-    const expiryDate = document.getElementById('card-expiry-month').value + '/' + document.getElementById('card-expiry-year').value;
-    
+    const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+    const expiryMonth = document.getElementById('card-expiry-month').value;
+    const expiryYear = document.getElementById('card-expiry-year').value;
+    const cvv = document.getElementById('card-cvv').value;
+
     console.log('Card Number:', cardNumber);
-    console.log('Expiry Date:', expiryDate);
-    
+    console.log('Expiry Date:', `${expiryMonth}/${expiryYear}`);
+    console.log('CVV:', cvv);
+
     showCheckoutModal();
 });
 

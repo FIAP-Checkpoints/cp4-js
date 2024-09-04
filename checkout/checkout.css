@@ -1,0 +1,45 @@
+body {
+    background-color: #f8f9fa;
+}
+.card-number-input {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.card-number-input input {
+    width: 22%;
+    text-align: center;
+}
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+.checkout-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.card-input {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+}
+.card-input input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 0;
+    margin: 0 4px;
+}
+.card-input span {
+    color: #6c757d;
+}
