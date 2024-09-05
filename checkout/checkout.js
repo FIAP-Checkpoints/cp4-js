@@ -1,31 +1,43 @@
 function fetchCart() {
-    return JSON.parse(localStorage.getItem('cart')) || [];
+    return new Promise((resolve, reject) => {
+        try {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        resolve(cart);
+        } catch (error) {
+        reject(error);
+        }
+    });
 }
 
-function renderCheckoutItems() {
-    const cart = fetchCart();
-    const checkoutItems = document.getElementById('checkout-items');
-    const checkoutTotal = document.getElementById('checkout-total');
-    let total = 0;
-    checkoutItems.innerHTML = '';
-
-    cart.forEach(item => {
+async function renderCheckoutItems() {
+    try {
+      const cart = await fetchCart();
+      const checkoutItems = document.getElementById('checkout-items');
+      const checkoutTotal = document.getElementById('checkout-total');
+      let total = 0;
+  
+      checkoutItems.innerHTML = '';
+  
+      for (const item of cart) {
         total += item.price;
         checkoutItems.innerHTML += `
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
-                <div class="d-flex align-items-center">
-                    <img src="${item.img}" alt="${item.name}" width="50" class="me-3">
-                    <div>
-                        <h6 class="mb-0">${item.name}</h6>
-                        <small class="text-muted">Quantity: 1</small>
-                    </div>
-                </div>
-                <div class="text-success">$${item.price.toFixed(2)}</div>
+          <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+            <div class="d-flex align-items-center">
+              <img src="${item.img}" alt="${item.name}" width="50" class="me-3">
+              <div>
+                <h6 class="mb-0">${item.name}</h6>
+                <small class="text-muted">Quantity: 1</small>
+              </div>
             </div>
+            <div class="text-success">$${item.price.toFixed(2)}</div>
+          </div>
         `;
-    });
-
-    checkoutTotal.textContent = total.toFixed(2);
+      }
+  
+      checkoutTotal.textContent = total.toFixed(2);
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
 }
 
 function formatCardNumber(input) {
@@ -51,7 +63,6 @@ function validateExpiryDate(month, year) {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear() % 100;
     const currentMonth = currentDate.getMonth() + 1;
-
     const inputYear = parseInt(year, 10);
     const inputMonth = parseInt(month, 10);
 
@@ -98,19 +109,31 @@ function showCheckoutModal() {
     });
 }
 
-document.getElementById('payment-form').addEventListener('submit', function(e) {
+document.getElementById('payment-form').addEventListener('submit', async function(e) {
     e.preventDefault();
-    const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
-    const expiryMonth = document.getElementById('card-expiry-month').value;
-    const expiryYear = document.getElementById('card-expiry-year').value;
-    const cvv = document.getElementById('card-cvv').value;
+    
+    const spinner = document.getElementById('loading-spinner');
+    spinner.classList.remove('d-none');
 
-    console.log('Card Number:', cardNumber);
-    console.log('Expiry Date:', `${expiryMonth}/${expiryYear}`);
-    console.log('CVV:', cvv);
-
-    showCheckoutModal();
+    try {
+        await finalizePurchase();
+        showCheckoutModal();
+    } catch (error) {
+        console.error('Error finalizing purchase:', error);
+        alert('Something went wrong. Please try again.');
+    } finally {
+        spinner.classList.add('d-none');
+    }
 });
+
+async function finalizePurchase() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, 2000);  
+    });
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
     renderCheckoutItems();

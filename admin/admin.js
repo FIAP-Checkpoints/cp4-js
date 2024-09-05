@@ -1,114 +1,96 @@
-// Fetch products from localStorage
 function fetchProducts() {
-    return JSON.parse(localStorage.getItem('products')) || [];
-  }
-  
-  // Save products to localStorage
-  function saveProducts(products) {
+  return JSON.parse(localStorage.getItem('products')) || [];
+}
+
+async function createProduct(product) {
+  const products = fetchProducts();
+  product.id = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+  products.push(product);
+  localStorage.setItem('products', JSON.stringify(products));
+  return product;
+}
+
+async function updateProduct(product) {
+  const products = fetchProducts();
+  const index = products.findIndex(p => parseInt(p.id) === parseInt(product.id));
+  if (index !== -1) {
+    products[index] = product;
     localStorage.setItem('products', JSON.stringify(products));
+    return product;
   }
-  
-  // Add a new product
-  function addProduct(product) {
-    const products = fetchProducts();
-    product.id = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-    products.push(product);
-    saveProducts(products);
-    renderAdminProducts();
-  }
-  
-  // Update an existing product
-  function updateProduct(product) {
-    const products = fetchProducts();
-    const index = products.findIndex(p => p.id === parseInt(product.id));
-    if (index !== -1) {
-      products[index] = product;
-      saveProducts(products);
-      renderAdminProducts();
-    }
-  }
-  
-  // Delete a product
-  function deleteProduct(productId) {
-    const products = fetchProducts();
-    const updatedProducts = products.filter(p => p.id !== parseInt(productId));
-    saveProducts(updatedProducts);
-    renderAdminProducts();
-  }
-  
-  // Render products in the admin panel
-  function renderAdminProducts() {
-    const products = fetchProducts();
-    const productContainer = document.getElementById('admin-product-list');
-    productContainer.innerHTML = '';
-  
-    products.forEach(product => {
-      const productCard = `
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <img src="${product.img}" class="card-img-top" alt="${product.name}">
-            <div class="card-body">
-              <h5 class="card-title">${product.name}</h5>
-              <p class="card-text">${product.description}</p>
-              <p class="card-text"><strong>$${parseFloat(product.price).toFixed(2)}</strong></p>
-              <p class="card-text"><small class="text-muted">Category: ${product.category}</small></p>
-              <div class="btn-group">
-                <button class="btn btn-success" onclick="editProduct(${product.id})"><i class="fas fa-edit me-1"></i>Edit</button>
-                <button class="btn btn-danger" onclick="deleteProduct(${product.id})"><i class="fas fa-trash-alt me-1"></i>Delete</button>
-              </div>
+  throw new Error('Product not found');
+}
+
+async function deleteProduct(productId) {
+  const products = fetchProducts();
+  const updatedProducts = products.filter(p => p.id !== productId);
+  localStorage.setItem('products', JSON.stringify(updatedProducts));
+}
+
+async function renderAdminProducts() {
+  const products = fetchProducts();
+  const productContainer = document.getElementById('admin-product-list');
+  productContainer.innerHTML = '';
+  for (const product of products) {
+    const productCard = `
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="${product.img}" class="card-img-top" alt="${product.name}">
+          <div class="card-body">
+            <h5 class="card-title">${product.name}</h5>
+            <p class="card-text">${product.description}</p>
+            <p class="card-text"><strong>$${parseFloat(product.price).toFixed(2)}</strong></p>
+            <p class="card-text"><small class="text-muted">Category: ${product.category}</small></p>
+            <div class="btn-group">
+              <button class="btn btn-success" onclick="editProduct(${product.id})"><i class="fas fa-edit me-1"></i>Edit</button>
+              <button class="btn btn-danger" onclick="deleteProductAndRender(${product.id})"><i class="fas fa-trash-alt me-1"></i>Delete</button>
             </div>
           </div>
         </div>
-      `;
-      productContainer.insertAdjacentHTML('beforeend', productCard);
-    });
+      </div>
+    `;
+    productContainer.insertAdjacentHTML('beforeend', productCard);
   }
-  
-  // Edit a product
-  function editProduct(productId) {
-    const products = fetchProducts();
-    const product = products.find(p => p.id === parseInt(productId));
-    if (product) {
-      document.getElementById('product-id').value = product.id;
-      document.getElementById('product-name').value = product.name;
-      document.getElementById('product-category').value = product.category;
-      document.getElementById('product-price').value = product.price;
-      document.getElementById('product-img').value = product.img;
-      document.getElementById('product-description').value = product.description;
-    }
+}
+
+function editProduct(productId) {
+  const products = fetchProducts();
+  const product = products.find(p => parseInt(p.id) === parseInt(productId));
+  if (product) {
+    document.getElementById('product-id').value = product.id;
+    document.getElementById('product-name').value = product.name;
+    document.getElementById('product-category').value = product.category;
+    document.getElementById('product-price').value = product.price;
+    document.getElementById('product-img').value = product.img;
+    document.getElementById('product-description').value = product.description;
   }
-  
-  // Event listener for form submission
-  document.getElementById('product-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-  
-    const product = {
-      id: document.getElementById('product-id').value ? parseInt(document.getElementById('product-id').value) : null,
-      name: document.getElementById('product-name').value,
-      category: document.getElementById('product-category').value,
-      price: parseFloat(document.getElementById('product-price').value),
-      img: document.getElementById('product-img').value,
-      description: document.getElementById('product-description').value
-    };
-  
-    if (product.id) {
-      updateProduct(product);
-    } else {
-      addProduct(product);
-    }
-  
-    this.reset();
-    document.getElementById('product-id').value = '';
-  });
-  
-  // Initialize products in localStorage if not already present
-  if (!localStorage.getItem('products')) {
-    fetch('/data/products.json')
-      .then(response => response.json())
-      .then(data => {
-        localStorage.setItem('products', JSON.stringify(data.products));
-        renderAdminProducts();
-      });
+}
+
+async function deleteProductAndRender(productId) {
+  await deleteProduct(productId);
+  renderAdminProducts();
+}
+
+document.getElementById('product-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const product = {
+    id: document.getElementById('product-id').value ? parseInt(document.getElementById('product-id').value) : null,
+    name: document.getElementById('product-name').value,
+    category: document.getElementById('product-category').value,
+    price: parseFloat(document.getElementById('product-price').value),
+    img: document.getElementById('product-img').value,
+    description: document.getElementById('product-description').value
+  };
+  if (product.id) {
+    await updateProduct(product);
   } else {
-    renderAdminProducts();
+    await createProduct(product);
   }
+  this.reset();
+  document.getElementById('product-id').value = '';
+  renderAdminProducts();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderAdminProducts();
+});
