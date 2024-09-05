@@ -102,6 +102,7 @@ body {
 .input-group-text {
   background-color: #28a745;
   color: white;
+  height: 38px;
   border: 1px solid #28a745;
 }
 
